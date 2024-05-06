@@ -1,11 +1,14 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import NavBar from './components/NavBar';
+import SideBar from './components/SideBar';
 
 function App() {
+  const [auth,setAuth]=useState(false)
   return (
      
 <div>
-  <button className='bg-sky-500 hover:bg-slate-200 rounded font-bold'>Save bro</button>
+  {auth?<SideBar/>:<NavBar/>}
 </div>
 
     
