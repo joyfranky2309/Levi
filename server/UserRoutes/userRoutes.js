@@ -30,13 +30,13 @@ router.route("/test").get((req, res) => {
 // Register route
 router.route("/register").post(async (req, res) => {
   try {
-    const { name, DOB, email, password } = req.body;
+    const { username, DOB, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-    const newUser = new User({ name, DOB, email, password });
+    const newUser = new User({ username, DOB, email, password });
     await newUser.save();
 
     const token = jwt.sign({ userId: newUser._id }, secretKey, { expiresIn: '1h' });

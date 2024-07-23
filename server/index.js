@@ -2,9 +2,12 @@ require("dotenv").config()
 const express = require("express");
 const api= express();
 const port= 5000;
+api.use(express.json());
+api.use(express.urlencoded({ extended: true }));
 const connector= require("./Mongo/connect.js")
 const userRoutes= require("./UserRoutes/userRoutes.js")
 const chatRoutes=require("./ChatRoutes/chatRoutes.js")
+const bodyParser = require("body-parser"); 
 
 api.use("/api/user",userRoutes)
 api.use("/api/chat",chatRoutes)
