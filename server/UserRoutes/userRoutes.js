@@ -1,9 +1,10 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const User = require('../Mongo/Models/userSchema');
 const router = express.Router();
 
-const secretKey = process.env.SECRETKEY; 
+const secretKey = process.env.SECRETKEY;
 
 // Middleware to authenticate and extract user from token
 const authMiddleware = (req, res, next) => {
@@ -36,7 +37,10 @@ router.route("/register").post(async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-    const newUser = new User({ username, DOB, email, password });
+
+    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+
+    const newUser = new User({ username, DOB:new Date(DOB), email, password: hashedPassword });
     await newUser.save();
 
     const token = jwt.sign({ userId: newUser._id }, secretKey, { expiresIn: '1h' });
@@ -56,9 +60,12 @@ router.route("/login").post(async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
-    if (password !== user.password) {
+
+    const passwordMatch = await bcrypt.compare(password, user.password); // Compare passwords
+    if (!passwordMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
+
     const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
 
     res.status(200).json({ message: "Login successful", token });

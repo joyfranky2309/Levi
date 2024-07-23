@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const userSchema=mongoose.Schema({
     username:String,
-    DOB:String,
+    DOB:Date,
     email:{
         type:String,
         required:true,
