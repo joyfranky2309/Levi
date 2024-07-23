@@ -3,6 +3,7 @@ import NewChat from './components/NewChat';
 
 function ChatBotUi(props) {
   const [messages, setMessages] = useState([]);
+  const [userInput, setUserInput] = useState("");
 
   function generateAiResponse(userInput) {
     const greetings = [
@@ -48,7 +49,8 @@ function ChatBotUi(props) {
 
   const handleSendMessage = (event) => {
     event.preventDefault();
-    const userInput = event.target.elements.message.value;
+    if (userInput.trim() === "") return;
+
     const aiResponse = generateAiResponse(userInput);
     setMessages(prevMessages => [
       ...prevMessages,
@@ -56,29 +58,35 @@ function ChatBotUi(props) {
       { text: aiResponse, sender: 'ai' }
     ]);
 
-    event.target.elements.message.value = "";
+    setUserInput(""); 
   };
 
-
   return (
-    <div className=' p-5 h-auto w-full aspect-w-1 rounded-xl  bg-white col-span-2'>
-      <div className={`${!props.showText ? ' ml-12' : 'ml-0'} p-1 border shadow rounded ease-in-out duration-500 `}>
+    <div className='p-4 h-full w-full aspect-w-1 rounded-xl bg-white col-span-2'>
+      <div className={`${!props.showText ? 'ml-12' : 'ml-0'} p-1 border shadow rounded ease-in-out duration-500`}>
         <h1 className='text-black text-3xl font-bold p-1 font-sans'>Levi</h1>
         <br />
-        {!props.newChatz ?
-          <NewChat />
-          :
-          <div className='p-4 mx-auto bg-white rounded-xl overflow-hidden md:max-w-2xl'>
+        {props.newChatz ?
+          <div className='p-5 h-fit bg-white rounded-xl overflow-hidden md:max-w-2xl '>
             {messages.map((message, index) => (
-              <div key={index} className={`${message.sender === 'user' ? 'bg-blue-200' : 'bg-gray-200'} p-2 rounded-xl mb-2`}>
+              <div key={index} className={`${message.sender === 'user' ? 'bg-indigo-400' : 'bg-gray-200'} p-2 rounded-xl mb-2`}>
                 {message.text}
               </div>
             ))}
           </div>
+          :
+          <NewChat />
         }
-        <div className=' mt-2 flex shadow rounded-2xl '>
-          <input type='text' placeholder='enter your message' className='w-full rounded-xl ' />
-          <button className='bg-blue-400 p-2 rounded-xl ' onClick={handleSendMessage}>send</button>
+        <div className='mt-2 flex shadow rounded-2xl'>
+          <input
+            type='text'
+            placeholder='enter your message'
+            className='w-full rounded-xl'
+            name='message'
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+          />
+          <button className='bg-blue-400 p-2 rounded-xl' onClick={handleSendMessage}>send</button>
         </div>
       </div>
     </div>

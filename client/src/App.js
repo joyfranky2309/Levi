@@ -6,16 +6,16 @@ import ChatBotUi from './ChatBotUi';
 import UserProfile from './components/UserProfile';
 import { Routes, Route } from 'react-router-dom';
 import Settings from './components/Settings';
-import Home from './components/Home';
+import Home from './components/home';
 import About from './components/About';
 import Features from './components/Features';
 import { Link } from 'react-router-dom';
-import Login from './components/Login';
-import Register from './components/Register';
+import Login from './components/login';
+import Register from './components/register';
 function App() {
-  const [auth, setAuth] = useState(false)
+  const [auth, setAuth] = useState(true)
   const [Xshow, setXshow] = useState(false)
-  const [Xnewchat, setXnewchat] = useState(false);
+  const [Xnewchat, setXnewchat] = useState(true);
   return (
 
     <div>

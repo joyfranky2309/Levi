@@ -4,22 +4,11 @@ import { useNavigate } from 'react-router-dom';
 export default function SideBar(props) {
   const [show, setShow] = useState(false);
   const navigate=useNavigate()
-  useEffect(() => {
-    props.handleCallback(show);
-  }, [show, props.handleCallback]);
 
-  useEffect(() => {
-    props.newChatz(false);
-  }, [props.newChatz]);
-  
   const changeVis = () => {
     setShow(!show);
   };
   
-  const setnewChat = () => {
-    props.newChatz(true);
-  };
-
   function navChat(){
     navigate('/chat')
   }
