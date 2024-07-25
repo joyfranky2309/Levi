@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import Login from './components/login';
 import Register from './components/register';
 function App() {
-  const [auth, setAuth] = useState(true)
+  const [auth, setAuth] = useState(false)
   const [Xshow, setXshow] = useState(false)
   const [Xnewchat, setXnewchat] = useState(true);
   return (
