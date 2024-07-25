@@ -1,9 +1,11 @@
 require("dotenv").config()
+const cors = require("cors");
 const express = require("express");
 const api= express();
 const port= 5000;
 api.use(express.json());
 api.use(express.urlencoded({ extended: true }));
+api.use(cors());
 const connector= require("./Mongo/connect.js")
 const userRoutes= require("./UserRoutes/userRoutes.js")
 const chatRoutes=require("./ChatRoutes/chatRoutes.js")

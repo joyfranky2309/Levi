@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import NavBar from './components/NavBar';
 import SideBar from './components/SideBar';
-import ChatBotUi from './ChatBotUi';
+import ChatBotUi from './components/ChatBotUi';
 import UserProfile from './components/UserProfile';
 import { Routes, Route } from 'react-router-dom';
 import Settings from './components/Settings';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NewChat from './components/NewChat';
+import NewChat from './NewChat';
 
 function ChatBotUi(props) {
   const [messages, setMessages] = useState([]);

@@ -31,7 +31,7 @@ router.route("/test").get((req, res) => {
 // Register route
 router.route("/register").post(async (req, res) => {
   try {
-    const { username, DOB, email, password } = req.body;
+    const { username, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -40,7 +40,7 @@ router.route("/register").post(async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
 
-    const newUser = new User({ username, DOB:new Date(DOB), email, password: hashedPassword });
+    const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
 
     const token = jwt.sign({ userId: newUser._id }, secretKey, { expiresIn: '1h' });

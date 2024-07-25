@@ -2,7 +2,7 @@ const express = require("express");
 const Levi = require("../Brain/Dimaag");
 const router = express.Router() ;
 
-router.route("/prompt").get(async(req,res)=>{
+router.route("/prompt").post(async(req,res)=>{
    try {
     const response= await Levi("laws about drug abuse");
     console.log(response)

@@ -1,6 +1,7 @@
 require("dotenv").config()
 const Groq = require('groq-sdk');
 
+console.log(process.env.SECRETKEY)
 const groq = new Groq({apiKey:process.env.SECRETKEY});
 async function Gemma_model(prompt) {
   const chatCompletion = await groq.chat.completions.create({

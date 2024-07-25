@@ -1,5 +1,5 @@
  import React, { useState } from 'react';
-
+import axios from 'axios';
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -19,20 +19,27 @@ const Register = () => {
     return age;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Passwords don't match");
       return;
     }
-    console.log('Username:', username);
-    console.log('Email:', email);
-    console.log('Date of Birth:', dob.toISOString().split('T')[0]);
-    console.log('Password:', password);
-    console.log('Confirmed Password:', confirmPassword);
+    
+    const userData = {
+      username: username,
+      email: email,
+      password: password,
+    };
 
-    // Implement your registration logic here (e.g., sending data to server)
+    try {
+      const response = await axios.post("http://localhost:5000/api/user/register", userData);
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
+
 
   return (
     <div className="container mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-screen">
@@ -59,18 +66,6 @@ const Register = () => {
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
-          className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
-
-        <label htmlFor="dob" className="text-gray-700 font-medium">
-          Date of Birth:
-        </label>
-        <input
-          type="date"
-          id="dob"
-          value={dob.toISOString().split('T')[0]}
-          onChange={(e) => setDob(new Date(e.target.value))}
           required
           className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
