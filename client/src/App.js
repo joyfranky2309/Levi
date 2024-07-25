@@ -12,14 +12,16 @@ import Features from './components/Features';
 import { Link } from 'react-router-dom';
 import Login from './components/login';
 import Register from './components/register';
+import { useAuth } from './components/auth/AuthContext';
 function App() {
-  const [auth, setAuth] = useState(false)
+  const {user} = useAuth();
   const [Xshow, setXshow] = useState(false)
   const [Xnewchat, setXnewchat] = useState(true);
+  const auth=user
   return (
 
     <div>
-      {auth ?
+      { auth ?
         <div className='flex fixed top-0 left-0 right-0 p-1 h-full'>
           <SideBar handleCallback={setXshow} newChatz={setXnewchat} />
           <Routes>

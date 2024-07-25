@@ -1,22 +1,24 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const nav= useNavigate()
   const [user, setUser] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
   useEffect(() => {
     if (cookies.token) {
-      // Fetch user data using the token
       axios.get('http://localhost:5000/api/user/currentUser', {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
       })
       .then(response => {
+        console.log(response)
         setUser(response.data);
       })
       .catch(error => {
@@ -31,6 +33,7 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post('http://localhost:5000/api/user/login', { email:email, password:password });
       setCookie('token', response.data.token, { path: '/' });
       setUser(response.data.user);
+      nav('/chat')
     } catch (error) {
       console.error('Login error:', error);
       throw error;
@@ -41,6 +44,7 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post('http://localhost:5000/api/user/register', {username:name,email:email,password:password});
       setCookie('token', response.data.token, { path: '/' });
       setUser(response.data.user);
+      nav('/chat')
     } catch (error) {
       console.error('Registering:', error);
       throw error;
@@ -50,6 +54,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     removeCookie('token', { path: '/' });
+    nav("/")
   };
 
   return (

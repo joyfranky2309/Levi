@@ -1,7 +1,7 @@
  import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import {register} from './auth/AuthContext'
+import { useAuth } from './auth/AuthContext';
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -9,16 +9,18 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate=useNavigate()
-  
- 
+  const {register}=useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Passwords don't match");
       return;
     }
-    const response=register(username,email,password)
+   try {
+    await register(username,email,password)
+   } catch (error) {
     
+   }
   };
 
   return (
