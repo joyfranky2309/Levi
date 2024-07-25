@@ -1,49 +1,29 @@
  import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import {register} from './auth/AuthContext'
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState(new Date());
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
-  const calculateAge = (dob) => {
-    const today = new Date();
-    let age = today.getFullYear() - dob.getFullYear();
-    const m = today.getMonth() - dob.getMonth();
-
-    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
-      age--;
-    }
-
-    return age;
-  };
-
+  const navigate=useNavigate()
+  
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Passwords don't match");
       return;
     }
+    const response=register(username,email,password)
     
-    const userData = {
-      username: username,
-      email: email,
-      password: password,
-    };
-
-    try {
-      const response = await axios.post("http://localhost:5000/api/user/register", userData);
-      console.log('Response:', response.data);
-    } catch (error) {
-      console.error('Error:', error);
-    }
   };
 
-
   return (
-    <div className="container mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-4xl font-bold mb-8 text-center">Levi</h1> 
+    <div className="container mx-auto px-4 py-15 flex flex-col items-center justify-center min-h-screen ">
+      <h1 className="text-4xl font-bold mb-8 text-center bg-white p-3 rounded">Levi</h1> 
       <form onSubmit={handleSubmit} className="flex flex-col space-y-4 w-full max-w-md bg-white p-3 rounded">
       <h1 className="text-2xl font-bold mb-8 text-center">Register </h1> 
         <label htmlFor="username" className="text-gray-700 font-medium">
@@ -97,6 +77,11 @@ const Register = () => {
         <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+          <div className='text-sm'>
+              <a className='font-medium text-indigo-600 hover:text-indigo-500' onClick={()=>navigate("/getstarted")}>
+                Already have an account? Login
+              </a>
+            </div>
           </form>
         </div>
   );

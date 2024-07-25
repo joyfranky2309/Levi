@@ -45,7 +45,7 @@ router.route("/register").post(async (req, res) => {
 
     const token = jwt.sign({ userId: newUser._id }, secretKey, { expiresIn: '1h' });
 
-    res.status(201).json({ message: "User registered successfully", token });
+    res.status(201).json({ message: "User registered successfully",user:username, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -68,7 +68,7 @@ router.route("/login").post(async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
 
-    res.status(200).json({ message: "Login successful", token });
+    res.status(200).json({ message: "Login successful",user:user.username, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });

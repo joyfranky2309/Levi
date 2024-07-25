@@ -12,9 +12,13 @@ function Login() {
       email:email,
       password:password
     }
-    const response = await axios.post("http://localhost:5000/api/user/login",userData);
-    console.log(response.data)
-    
+   try {
+     const response = await axios.post("http://localhost:5000/api/user/login",userData);
+     console.log(response.data)
+   } catch (error) {
+    console.log(error)
+   }
+
   };
 
   return (
