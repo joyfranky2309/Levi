@@ -25,6 +25,7 @@ function App() {
         <div className='flex fixed top-0 left-0 right-0 p-1 h-full'>
           <SideBar handleCallback={setXshow} newChatz={setXnewchat} />
           <Routes>
+            <Route path='/chatreg' element={<ChatBotUi showText={Xshow} newChatz={!Xnewchat} />} />
             <Route path='/chat' element={<ChatBotUi showText={Xshow} newChatz={Xnewchat} />} />
             <Route path='/profile' element={<UserProfile />} />
             <Route path='/Settings' element={<Settings />} />

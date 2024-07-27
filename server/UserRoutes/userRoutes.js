@@ -3,24 +3,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require('../Mongo/Models/userSchema');
 const router = express.Router();
-
+const authMiddleware= require("./authMiddleware")
 const secretKey = process.env.SECRETKEY;
 
-// Middleware to authenticate and extract user from token
-const authMiddleware = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) {
-    return res.status(401).json({ message: "Access denied. No token provided." });
-  }
-
-  try {
-    const decoded = jwt.verify(token, secretKey);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    res.status(400).json({ message: "Invalid token." });
-  }
-};
 
 // Test route
 router.route("/test").get((req, res) => {
@@ -38,7 +23,7 @@ router.route("/register").post(async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10); 
 
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();

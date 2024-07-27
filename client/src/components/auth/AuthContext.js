@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
       })
       .then(response => {
         console.log(response)
-        setUser(response.data);
+        setUser(response.data.username);
       })
       .catch(error => {
         console.error('Error fetching user:', error);
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('http://localhost:5000/api/user/login', { email:email, password:password });
       setCookie('token', response.data.token, { path: '/' });
-      setUser(response.data.user);
+      setUser(response.data.username);
       nav('/chat')
     } catch (error) {
       console.error('Login error:', error);
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('http://localhost:5000/api/user/register', {username:name,email:email,password:password});
       setCookie('token', response.data.token, { path: '/' });
-      setUser(response.data.user);
+      setUser(response.data.username);
       nav('/chat')
     } catch (error) {
       console.error('Registering:', error);

@@ -1,10 +1,13 @@
 const express = require("express");
 const Levi = require("../Brain/Dimaag");
+const Chat= require("../Mongo/Models/chatSchema")
 const router = express.Router() ;
+const authMiddleware= require("../UserRoutes/authMiddleware")
 
 router.route("/prompt").post(async(req,res)=>{
    try {
-    const response= await Levi("laws about drug abuse");
+      const {prompt,user} = req.body;
+    const response= await Levi(prompt);
     console.log(response)
     res.status(200).json({"Ai_reply":response})
    } catch (error) {
