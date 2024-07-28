@@ -1,39 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from './auth/AuthContext';
+import { useCookies } from 'react-cookie';
 
 const ChatBot = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const [messages, setMessages] = useState([
     { sender: 'bot', text: 'Hello! How can I help you today?' },
   ]);
   const { user } = useAuth();
   const [input, setInput] = useState('');
-
   const formatText = (text) => {
-    // Replace hashtags with headers
     text = text.replace(/## (.+)/g, '<h2>$1</h2>');
     text = text.replace(/# (.+)/g, '<h1>$1</h1>');
-    // Replace asterisks with line breaks
     text = text.replace(/\*/g, '<br/>');
     return text;
   };
+  useEffect(() => {
+    const fetchChatHistory = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/chat/history', {
+          params: { user: user._id },
+          headers: {
+            Authorization: `Bearer ${cookies.token}` 
+          }
+        });
+        const chatHistory = response.data.map(chat => ({
+          sender: 'user',
+          text: chat.userMessage
+        })).concat(response.data.map(chat => ({
+          sender: 'Levi',
+          text: formatText(chat.leviResponse)
+        })));
+        setMessages([{ sender: 'bot', text: 'Hello! How can I help you today?' }, ...chatHistory]);
+      } catch (error) {
+        console.error('Error fetching chat history:', error);
+      }
+    };
+
+    fetchChatHistory();
+  }, [user]);
+
 
   const handleSend = async () => {
     if (input.trim()) {
-      // Add user message to the chat
       setMessages([...messages, { sender: 'user', text: input }]);
       setInput('');
 
       try {
-        // Send user's message to the backend
         const response = await axios.post('http://localhost:5000/api/chat/prompt', {
           prompt: input,
+          user: user._id
+        }, {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`
+          }
         });
 
-        // Format the response text
         const formattedText = formatText(response.data.Ai_reply);
-
-        // Add AI's response to the chat
         setMessages((prevMessages) => [
           ...prevMessages,
           { sender: 'Levi', text: formattedText },
