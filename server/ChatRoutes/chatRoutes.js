@@ -7,6 +7,7 @@ const authMiddleware= require("../UserRoutes/authMiddleware")
 router.route("/prompt").post(async(req,res)=>{
    try {
       const {prompt,user} = req.body;
+      console.log(user)
     const response= await Levi(prompt);
     console.log(response)
     res.status(200).json({"Ai_reply":response})

@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from './auth/AuthContext';
+
 const ChatBot = () => {
   const [messages, setMessages] = useState([
     { sender: 'bot', text: 'Hello! How can I help you today?' },
   ]);
   const { user } = useAuth();
   const [input, setInput] = useState('');
-let check =user
+
+  const formatText = (text) => {
+    // Replace hashtags with headers
+    text = text.replace(/## (.+)/g, '<h2>$1</h2>');
+    text = text.replace(/# (.+)/g, '<h1>$1</h1>');
+    // Replace asterisks with line breaks
+    text = text.replace(/\*/g, '<br/>');
+    return text;
+  };
+
   const handleSend = async () => {
     if (input.trim()) {
       // Add user message to the chat
@@ -19,9 +29,10 @@ let check =user
         const response = await axios.post('http://localhost:5000/api/chat/prompt', {
           prompt: input,
         });
-        const formattedText = response.data.Ai_reply
-        .replace(/\*/g, '\n')  
-        .replace(/\n/g, '\t');
+
+        // Format the response text
+        const formattedText = formatText(response.data.Ai_reply);
+
         // Add AI's response to the chat
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -38,34 +49,35 @@ let check =user
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-gray-100 p-4">
-      <div className="flex-grow overflow-y-auto p-4 bg-white rounded shadow">
-      <h1 className='text-white text-3xl bg-black p-2 rounded-md '>Levi</h1>
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+    <div className="flex flex-col h-screen w-screen bg-gray-100 p-4 rounded-sm">
+        <h1 className='text-black text-3xl bg-indigo-500 p-4 rounded-t-md text-center font-serif'>Levi</h1>
+      <div className="flex flex-col flex-grow overflow-y-auto p-3 bg-white rounded shadow relative">
+        <div className="flex-grow overflow-y-auto p-3">
+          {messages.map((message, index) => (
             <div
-              className={`max-w-xl p-3 m-2 rounded-lg ${
-                message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-800'
-              }`}
+              key={index}
+              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} mb-2`}
             >
-              {message.text}
+              <div
+                className={`max-w-xl p-3 rounded-lg shadow ${
+                  message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-800'
+                }`}
+                dangerouslySetInnerHTML={{ __html: message.text }}
+              />
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-      <div className="mt-4 flex">
+      <div className="mt-4 flex items-center justify-between bg-white p-2 rounded-md shadow-md">
         <input
           type="text"
-          className="flex-grow p-2 border rounded-l-lg focus:outline-none focus:ring focus:border-blue-300"
+          className="flex-grow p-2 border rounded-l-md focus:outline-none focus:ring focus:border-blue-300"
           placeholder="Type your message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
         <button
-          className="p-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600 focus:outline-none focus:ring"
+          className="p-2 bg-indigo-600 text-white rounded-r-md hover:bg-indigo-700 focus:outline-none focus:ring"
           onClick={handleSend}
         >
           Send
