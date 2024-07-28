@@ -26,7 +26,7 @@ router.route("/prompt").post(authMiddleware, async (req, res) => {
 router.route("/history").get(authMiddleware, async (req, res) => {
    try {
      const { user } = req.query; 
-     const chats = await Chat.find({ user_id: user }).sort({ createdAt: -1 }).exec();
+     const chats = await Chat.find({ user_id: user }).sort({ createdAt: 1 }).exec();
      res.status(200).json(chats);
    } catch (error) {
      console.log(error);
