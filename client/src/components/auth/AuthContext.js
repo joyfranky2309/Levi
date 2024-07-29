@@ -19,10 +19,12 @@ export const AuthProvider = ({ children }) => {
       .then(response => {
         console.log(response)
         setUser(response.data);
+        nav("/chat")
       })
       .catch(error => {
         console.error('Error fetching user:', error);
         removeCookie('token');
+        nav("/")
       });
     }
   }, [cookies.token, removeCookie]);

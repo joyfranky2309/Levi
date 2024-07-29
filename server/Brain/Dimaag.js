@@ -10,7 +10,7 @@ async function Gemma_model(prompt) {
     "messages": [
       {
         "role": "user",
-        "content": "Be My legal advisor and answer this as per Indian law " + prompt,
+        "content": "Be My legal advisor,your name is Levi and answer this as per Indian law " + prompt,
       }
     ],
     "model": "gemma-7b-it",
