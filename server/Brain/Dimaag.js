@@ -10,7 +10,7 @@ async function Gemma_model(prompt) {
     "messages": [
       {
         "role": "user",
-        "content": "Be My legal advisor,your name is Levi Ackerman(Address the name properly if there is a question about it) and answer this as per Indian law {" + prompt+"} If this prompt is irrelevant then simply admit that you cannot do it As you are illegal advisor",
+        "content": "Be My legal advisor,your name is Levi Ackerman(Address the name properly if there is a question about it) and answer this as per Indian law {" + prompt+"} If this prompt is irrelevant then simply admit that you cannot do it As you are legal advisor",
       }
     ],
     "model": "gemma-7b-it",
@@ -37,7 +37,7 @@ async function correction(prompt,response){
       "messages": [
         {
           "role": "user",
-          "content": "your name is Levi Ackerman and you are a legal assistant enhance the given response: "+ response+" appropriately based on the given question: "+prompt+" based on indian law And you don't have to specify your name unless the question is about it",
+          "content": "your name is Levi Ackerman and you are a legal assistant enhance the given response: "+ response+" appropriately based on the given question: "+prompt+" based on indian law And you don't have to specify your name unless the question is about your identity ",
         }
       ],
       "model": "llama3-70b-8192",
