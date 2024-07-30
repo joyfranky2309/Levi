@@ -10,7 +10,7 @@ async function Gemma_model(prompt) {
     "messages": [
       {
         "role": "user",
-        "content": "Be My legal advisor,your name is Levi and answer this as per Indian law " + prompt,
+        "content": "Be My legal advisor,your name is Levi Ackerman(Address the name properly if there is a question about it) and answer this as per Indian law {" + prompt+"} If this prompt is irrelevant then simply admit that you cannot do it As you are illegal advisor",
       }
     ],
     "model": "gemma-7b-it",
@@ -25,10 +25,36 @@ async function Gemma_model(prompt) {
   for await (const chunk of chatCompletion) {
     response += chunk.choices[0]?.delta?.content || '';
   }
-  return response;
+  const checkres=await correction(prompt,response)
+  return checkres;
  } catch (error) {
   console.log(error)
  }
 }
-
+async function correction(prompt,response){
+  try {
+    const chatCompletion = await groq.chat.completions.create({
+      "messages": [
+        {
+          "role": "user",
+          "content": "your name is Levi Ackerman and you are a legal assistant enhance the given response: "+ response+" appropriately based on the given question: "+prompt+" based on indian law And you don't have to specify your name unless the question is about it",
+        }
+      ],
+      "model": "llama3-70b-8192",
+      "temperature": 1,
+      "max_tokens": 1024,
+      "top_p": 1,
+      "stream": true,
+      "stop": null
+    });
+  
+    let res = '';
+    for await (const chunk of chatCompletion) {
+      res += chunk.choices[0]?.delta?.content || '';
+    }
+    return res;
+   } catch (error) {
+    console.log(error)
+   }
+}
 module.exports = Gemma_model;
