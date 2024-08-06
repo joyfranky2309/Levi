@@ -14,7 +14,7 @@ async function Gemma_model(prompt) {
       }
     ],
     "model": "gemma-7b-it",
-    "temperature": 1,
+    "temperature": 0.5,
     "max_tokens": 1024,
     "top_p": 1,
     "stream": true,
@@ -37,7 +37,7 @@ async function correction(prompt,response){
       "messages": [
         {
           "role": "user",
-          "content": "your name is Levi Ackerman and you are a legal assistant enhance the given response: "+ response+" appropriately based on the given question: "+prompt+" based on indian law And you don't have to specify your name unless the question is about your name ,include the appropriate sections,laws and article wherever necessary.",
+          "content": "your name is Levi Ackerman and you are a legal assistant enhance the given response: "+ response+" appropriately based on the given question: "+prompt+" based on indian law And you don't have to specify your name unless the question is about your name.",
         }
       ],
       "model": "llama3-70b-8192",
